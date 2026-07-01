@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinnamoroll Health Calculator</title>
+    <style>
+        :root {
+            --sky-blue: #bfe3f7;
+            --pastel-blue: #97d2f3;
+            --cloud-white: #ffffff;
+            --soft-pink: #fbcce1;
+            --text-dark: #5a738e;
+            --border-radius-soft: 1.5rem; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Fredoka One', 'Nunito', 'Segoe UI', sans-serif;
+        }
+
+        html {
+            font-size: 16px; 
+        }
+
+        body {
+            background-color: var(--sky-blue);
+            background-image: linear-gradient(180deg, var(--sky-blue) 0%, #eef7fc 100%);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        header h1 {
+            font-size: 2.6rem; 
+            color: #4a627a;
+            text-shadow: 0.15rem 0.15rem 0px var(--cloud-white);
+            letter-spacing: 0.05rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .subheading {
+            font-size: 1.2rem;
+            color: #627d98;
+            max-width: 38rem; 
+            margin: 0 auto;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            max-width: 36rem; 
+            margin: 0 auto;
+        }
+
+        .kiosk-card {
+            background: var(--cloud-white);
+            padding: 2.5rem 2.2rem; 
+            border-radius: var(--border-radius-soft);
+            box-shadow: 0 0.6rem 2rem rgba(169, 202, 226, 0.45);
+            width: 100%;
+            margin-bottom: 1.5rem;
+            border: 0.25rem solid #dbedf7;
+            position: relative;
+        }
+
+        .kiosk-card::before, .kiosk-card::after {
+            content: "☁️";
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.6;
+        }
+        .kiosk-card::before { top: 0.8rem; left: 1rem; }
+        .kiosk-card::after { top: 0.8rem; right: 1rem; }
+
+        h2 {
+            margin-bottom: 1.8rem;
+            font-size: 1.65rem; 
+            text-align: center;
+            color: #4a627a;
+            border-bottom: 0.15rem dashed var(--pastel-blue);
+            padding-bottom: 0.8rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 1.05rem; 
+            color: #627d98;
+            padding-left: 0.25rem;
+        }
+
+        input, select {
+            padding: 0.9rem;
+            border: 0.15rem solid #e1f0fa;
+            border-radius: 0.8rem;
+            font-size: 1.1rem;
+            width: 100%;
+            background-color: #fafcfe;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--pastel-blue);
+            background-color: var(--cloud-white);
+            box-shadow: 0 0 0.6rem rgba(151, 210, 243, 0.5);
+        }
+
+        button {
+            background-color: var(--pastel-blue);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.25rem; 
+            font-weight: bold;
+            border-radius: 3rem;
+            cursor: pointer;
+            box-shadow: 0 0.3rem 0.8rem rgba(151, 210, 243, 0.4);
+            transition: all 0.2s ease;
+            margin-top: 0.6rem;
+            text-shadow: 0.05rem 0.05rem 0px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #7bc1eb;
+            transform: translateY(-0.1rem);
+            box-shadow: 0 0.5rem 1.1rem rgba(151, 210, 243, 0.5);
+        }
+
+        #resultCard {
+            width: 100%;
+            padding: 2rem;
+            border-radius: var(--border-radius-soft);
+            color: #ffffff;
+            text-align: center;
+            box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.08);
+            margin-top: 0.8rem;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 0.2rem solid rgba(255, 255, 255, 0.4);
+            text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #resultCard h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #resultCard .bmi-val {
+            font-size: 3.4rem;
+            font-weight: 800;
+            margin: 0.4rem 0;
+            background: rgba(255, 255, 255, 0.25);
+            display: inline-block;
+            padding: 0.2rem 1.5rem;
+            border-radius: 3rem;
+        }
+
+        #resultCard p {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.95rem;
+            color: #7b93ab;
+        }
+
+        /* Responsive Breakpoints defined via flexible viewport rules */
+        @media (max-width: 48rem) {
+            html { font-size: 14px; } 
+            body { padding: 1rem 0.8rem; }
+            .kiosk-card { padding: 2rem 1.5rem; }
+            header h1 { font-size: 2rem; }
+            .subheading { font-size: 1.05rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <h1>☁️ Cinnamon Health Station ☁️</h1>
+        <p class="subheading">Welcome to your private self-service wellness check! Take a quick moment to calculate your BMI and get helpful wellness tips to keep you feeling floating-on-a-cloud happy and healthy! ✨</p>
+    </header>
+
+    <main>
+        <div class="kiosk-card">
+            <h2>Calculate Your BMI</h2>
+            <form id="bmiForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="e.g. Cinnamoroll" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="1" max="120" placeholder="Years" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sex">Sex</label>
+                    <select id="sex" required>
+                        <option value="">Select option</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" min="1" step="0.1" placeholder="0.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" min="1" step="0.1" placeholder="0.0" required>
+                </div>
+
+                <button type="submit">Check My BMI ✨</button>
+            </form>
+        </div>
+
+        <section id="resultCard" class="hidden"></section>
+    </main>
+
+    <footer>
+        <p> Happy & Healthy Campuses </p>
+    </footer>
+
+    <script>
+        document.getElementById('bmiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value);
+            const sex = document.getElementById('sex').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const heightCm = parseFloat(document.getElementById('height').value);
+
+            const validations = [
+                { field: name },
+                { field: age },
+                { field: sex },
+                { field: weight },
+                { field: heightCm }
+            ];
+
+            let inputIsInvalid = false;
+            validations.forEach(function(item) {
+                if (!item.field || item.field === "" || (typeof item.field === 'number' && item.field <= 0)) {
+                    inputIsInvalid = true;
+                }
+            });
+
+            if (inputIsInvalid || isNaN(weight) || isNaN(heightCm) || age < 1 || age > 120) {
+                alert('Please verify your entries! All measurement values must be positive numbers.');
+                return;
+            }
+
+            const heightM = heightCm / 100;
+            const bmi = +(weight / (heightM * heightM)).toFixed(1);
+
+            let category = '';
+            let message = '';
+            let color = '';
+
+            switch (true) {
+                case bmi < 18.5:
+                    category = 'Underweight';
+                    color = '#7bc1eb'; 
+                    message = 'Consider a balanced, calorie-sufficient diet.';
+                    break;
+                case bmi < 25:
+                    category = 'Normal';
+                    color = '#a3e49b'; 
+                    message = 'Great! Keep up your healthy habits.';
+                    break;
+                case bmi < 30:
+                    category = 'Overweight';
+                    color = '#fcc07e'; 
+                    message = 'Consider more physical activity and mindful eating.';
+                    break;
+                default:
+                    category = 'Obese';
+                    color = '#fba3b9'; 
+                    message = 'We recommend consulting a healthcare provider.';
+            }
+
+            showResult(name, bmi, category, message, color);
+
+            recordSubmission({ name, age, sex, weight, heightCm, bmi, category });
+        });
+
+        function showResult(name, bmi, category, message, color) {
+            const resultCard = document.getElementById('resultCard');
+            resultCard.className = ''; 
+            resultCard.style.backgroundColor = color;
+            
+            resultCard.innerHTML = `
+                <h3>Hi ${name}! ⭐</h3>
+                <p>Your Health Category: <strong>${category}</strong></p>
+                <div class="bmi-val">${bmi}</div>
+                <p>${message}</p>
+            `;
+        }
+
+        function recordSubmission(record) {
+            const webAppUrl = 'https://script.google.com/macros/s/AKfycbwVZXeye-yw8RqAegWwDJ_xH0XYNMeF59PLPs6vW2TGosIZJHxNL69AcmYAWNgT90aD/exec';
+
+            if (webAppUrl === 'WEB_APP_URL') {
+                console.warn('API Endpoint URL needs initialization setup before running submission recording.');
+                return;
+            }
+
+            fetch(webAppUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(record)
+            })
+            .then(() => console.log('Data logged securely matching the sheets template layout.'))
+            .catch(err => console.error('Data transmission failed:', err));
+        }
+    </script>
+</body>
+</html>

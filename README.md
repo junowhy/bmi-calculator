@@ -20,7 +20,3 @@ A visually appealing, responsive self-service "Health Self-Check Kiosk" web appl
 - **Database/Backend:** Google Sheets API & Google Apps Script (Web App Deployment)
 
 
-
-📂 File Architecture
-├── index.html          # Main application structure, styling rules, and JS logic
-└── README.md           # Documentation for the project workspace
